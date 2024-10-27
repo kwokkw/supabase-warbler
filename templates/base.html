@@ -1,0 +1,82 @@
+{% import '_form_macros.html' as macros %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Warbler</title>
+
+  <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+  <!-- <script src="https://unpkg.com/jquery"></script> -->
+  <script src="https://unpkg.com/popper"></script>
+  <script src="https://unpkg.com/bootstrap"></script>
+
+  <link rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+  <link rel="stylesheet" href="/static/stylesheets/style.css">
+  <link rel="shortcut icon" href="/static/favicon.ico">
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+<nav class="navbar navbar-expand">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a href="{{ url_for('homepage') }}" class="navbar-brand">
+        <img src="/static/images/warbler-logo.png" alt="logo">
+        <span>Warbler</span>
+      </a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      {% if request.endpoint != None %}
+      <li>
+        <form class="navbar-form navbar-right" action="/users">
+          <input name="q" class="form-control" placeholder="Search Warbler" id="search">
+          <button class="btn btn-default">
+            <span class="fa fa-search"></span>
+          </button>
+        </form>
+      </li>
+      {% endif %}
+      {% if not g.user %}
+      <li><a href="{{ url_for('signup') }}">Sign up</a></li>
+      <li><a href="{{ url_for('login') }}">Log in</a></li>
+      {% else %}
+      <li>
+        <a href="{{ url_for('users_show', user_id=g.user.id) }}">
+          <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}">
+        </a>
+      </li>
+      <li><button id="open-modal">New Message</button></li>
+      <!-- <li><a href="{{ url_for('messages_add') }}">New Message</a></li> -->
+      <li><a href="{{ url_for('view_pending_follow_request', user_id=g.user.id) }}">Follow Request</a></li>
+      <li><a href="{{ url_for('logout') }}">Log out</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Modal HTML -->
+  {% if g.message_form %}
+    {% include '/messages/_new.html' %}
+  {% endif %}
+  
+  {% for category, message in get_flashed_messages(with_categories=True) %}
+  <div class="alert alert-{{ category }}">{{ message }}</div>
+  {% endfor %}
+
+  {% block content %}
+  {% endblock %}
+
+</div>
+
+<script src="https://unpkg.com/jquery"></script>
+<!-- Getting Axios -->
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
+

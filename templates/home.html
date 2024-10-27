@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row">
+
+    <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
+      <div class="card user-card">
+        <div>
+          <div class="image-wrapper">
+            <img src="{{ g.user.header_image_url }}" alt="" class="card-hero">
+          </div>
+          <a href="{{ url_for('users_show', user_id=g.user.id) }}" class="card-link">
+            <img src="{{ g.user.image_url }}"
+                 alt="Image for {{ g.user.username }}"
+                 class="card-image">
+            <p>@{{ g.user.username }}</p>
+          </a>
+          <ul class="user-stats nav nav-pills">
+            <li class="stat">
+              <p class="small">Messages</p>
+              <h4>
+                <a href="{{ url_for('users_show', user_id=g.user.id) }}">{{ g.user.messages | length }}</a>
+              </h4>
+            </li>
+            <li class="stat">
+              <p class="small">Following</p>
+              <h4>
+                <a href="{{ url_for('show_following', user_id=g.user.id) }}">{{ g.user.following | length }}</a>
+              </h4>
+            </li>
+            <li class="stat">
+              <p class="small">Followers</p>
+              <h4>
+                <a href="{{ url_for('users_followers', user_id=g.user.id) }}">{{ g.user.followers | length }}</a>
+              </h4>
+            </li>
+          </ul>
+          <p>{{ g.user.bio }}</p>
+        </div>
+      </div>
+    </aside>
+
+    <div class="col-lg-6 col-md-8 col-sm-12">
+
+      <ul class="list-group" id="messages">
+        {% for msg in messages %}
+
+        <li class="list-group-item">
+          
+          <a href="{{ url_for('messages_show', message_id=msg.id) }}" class="message-link">
+            <a href="{{ url_for('users_show', user_id=msg.user_id) }}">
+              <img src="{{ msg.user.image_url }}" alt="" class="timeline-image">
+            </a>
+
+            <div class="message-area">
+              <a href="{{ url_for('users_show', user_id=msg.user_id) }}">@{{ msg.user.username }}</a>
+              <span class="text-muted">{{ msg.timestamp.strftime('%d %B %Y') }}</span>
+              <p>{{ msg.text }}</p>
+            </div>
+          </a> <!-- `a.message-link` only wraps the message content-->
+
+          <!-- Removed `form` element to leverage event delegation -->
+          <!-- <form method="POST" action="{{ url_for('toggle_like', msg_id=msg.id) }}" id="messages-form"> -->
+          <!-- 
+            {{'btn-primary' if msg.id in likes else 'btn-secondary'}} 
+            This ensurs the page is rendered with the correct like/unlike state 
+            WHEN THE PAGE FIRST LOADS
+           -->
+          <button class="like-btn btn btn-sm 
+            {{'btn-primary' if msg.id in likes else 'btn-secondary'}}" 
+            data-msg-id="{{ msg.id }}"
+          >
+            <i class="fa fa-star"></i> 
+          </button>
+          <!-- </form> -->
+
+        </li>
+
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for follow in pending_requests %}
+  <div class="mb-5">
+
+    <p>{{ follow.user_following.username }} wants to follow you.</p>
+
+    <form method="POST" action="{{ url_for('approve_follow', follow_id=follow.user_following_id)}}">
+      <button type="submit" class="btn btn-success">Approve</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('deny_follow', follow_id=follow.user_following_id)}}">
+      <button type="submit" class="btn btn-danger">Deny</button>
+    </form>
+
+  </div>
+{% endfor %}
+
+{% endblock %}

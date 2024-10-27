@@ -1,0 +1,16 @@
+{% extends 'users/detail.html' %}
+{% block user_details %}
+  <div class="col-sm-9">
+    <div class="row">
+
+      
+      {% for follower in user.followers %}
+
+        {{ macros.render_user(follower) }}
+
+      {% endfor %}
+
+    </div>
+  </div>
+
+{% endblock %}

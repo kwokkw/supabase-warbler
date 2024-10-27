@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="row justify-content-md-center">
+    <div class="col-md-4">
+      <h2 class="join-message">Edit Your Profile.</h2>
+
+      
+      <form method="POST" id="user_form">
+        {{ macros.render_form(form, exclude_fields=['password']) }}
+
+        <p>To confirm changes, enter your password:</p>
+        {{ macros.render_error_msg(form.password) }}
+        {{ form.password(placeholder="Enter your password to confirm", class="form-control") }}
+
+        <div class="edit-btn-area">
+          <button class="btn btn-success">Edit this user!</button>
+          <a href="{{ url_for('homepage') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </form>
+
+      <a href="{{ url_for('change_password') }}">Change Your Password</a>
+    </div>
+  </div>
+
+{% endblock %}
