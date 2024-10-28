@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 
 from flask import Flask, render_template, request, flash, redirect, session, g, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
@@ -11,6 +12,8 @@ from sqlalchemy.orm import joinedload
 # `functools` provides higher-order functions (functions that act or return other functions)
 # One of the tools it provides is `wraps`
 from functools import wraps
+
+load_dotenv()  # take environment variables from .env.
 
 CURR_USER_KEY = "curr_user"
 
